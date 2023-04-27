@@ -1,0 +1,19 @@
+# Build directories
+build/
+
+# Coverage reports
+coverage
+
+# API keys and secrets
+.env
+.env.production
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dependency directory
+node_modules
+
+# ignore yarn.lock
+yarn.lock
