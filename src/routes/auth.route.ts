@@ -5,7 +5,7 @@ const authRoute = Router();
 
 authRoute.post(
     '/login',
-    passport.authenticate('local', { failWithError: true }),
+    passport.authenticate('local'),
     (req, res) => res.json({ message: 'successfully signed in' })
 );
 
