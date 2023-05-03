@@ -6,13 +6,13 @@ import { Strategy as LocalStrategy } from 'passport-local';
 export default (app: Application) => {
     // session middleware
     app.use(cookieSession({
-        secret: process.env.SESSION_TOKEN
+        keys: [(process.env.SESSION_TOKEN || '')]
     }));
     app.use(passport.session());
 
     // middleware that fixes passport/cookie-session compatibility
     // passport calls session.regenerate and session.save methods
-    // cookie-session does not have regenerate or save methods
+    // cookie-session does not have those methods
     app.use((req, res, next) => {
         if (req.session && !req.session.regenerate) {
             (req.session as Record<string, any>).regenerate = (cb: Function) => cb();
