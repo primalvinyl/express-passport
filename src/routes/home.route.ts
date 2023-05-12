@@ -7,11 +7,12 @@ homeRoute.get('/', (req, res) => res.json({ message: 'home' }));
 homeRoute.get(
     '/protected',
     (req, res, next) => {
-        if (req.isAuthenticated()) res.json({ message: 'accessed protected endpoint' });
-        else next('session error');
-    }
+        if (req.isAuthenticated()) next();
+        else next({ message: 'access denied' });
+    },
+    (req, res) => res.json({ message: 'access granted' })
 );
 
-homeRoute.all('/*', (req, res, next) => next('endpoint does not exist'));
+homeRoute.all('/*', (req, res, next) => next({ message: 'endpoint does not exist' }));
 
 export default homeRoute;

@@ -2,7 +2,6 @@ import express, { Application } from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import middleware from './middleware';
-import auth from './middleware/auth';
 import errorHandler from './middleware/errorHandler';
 import routes from './routes';
 
@@ -14,7 +13,6 @@ dotenv.config({
 // initialize express
 const app: Application = express();
 middleware(app);
-auth(app);
 routes(app);
 errorHandler(app);
 

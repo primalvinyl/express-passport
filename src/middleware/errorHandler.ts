@@ -1,15 +1,18 @@
-import { Application, Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import { Application, Request, Response, NextFunction } from 'express';
 
 export default (app: Application) => {
     app.use(
         (
-            err: ErrorRequestHandler,
+            error: any,
             req: Request,
             res: Response,
             next: NextFunction
         ) => {
-            res.status(400).json({
-                error_message: err,
+            console.log(error);
+            const status = error.status || 400;
+            const message = error.message || '';
+            res.status(status).json({
+                message: message,
                 error: true
             });
         }
