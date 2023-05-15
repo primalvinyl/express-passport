@@ -1,13 +1,25 @@
-import passport, { Strategy } from 'passport';
+import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 
-export default () => {
-    // initialize strategy
-    const localStrategy = new LocalStrategy((username, password, done) => {
-        if (username === 'fu' && password === 'bar') done(null, { username });
-        else done({ message: 'authentication failed' });
-    });
+function getVerifyFunction() {
+    let verifyFunction;
+    switch (process.env.NODE_ENV) {
+        case 'production':
+            verifyFunction = (username: string, password: string, done: Function) => {
+                if (username === 'fu' && password === 'bar') done(null, { username });
+                else done({ message: 'authentication failed' });
+            };
+            break;
+        default:
+            verifyFunction = (username: string, password: string, done: Function) => {
+                if (username === 'test' && password === 'test') done(null, { username });
+                else done({ message: 'authentication failed' });
+            };
+    }
+    return verifyFunction;
+}
 
-    // bind strategy to passport
-    passport.use(localStrategy);
+export default () => {
+    const verifyFunction = getVerifyFunction();
+    passport.use(new LocalStrategy(verifyFunction));
 };

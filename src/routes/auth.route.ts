@@ -47,7 +47,7 @@ authRoute.post(
         if (username && password) {
             const newUser = { username, password };
             req.login(newUser, (error) => {
-                if (error) next({ status: 500, message: 'could not sign up' });
+                if (error) next({ status: 500, message: 'sign up failed' });
                 else res.json({ message: 'successfully signed up' });
             });
         } else next({ message: 'missing credentials' });
