@@ -5,7 +5,8 @@ import passport from 'passport';
 export default (app: Application) => {
     // session middleware
     app.use(cookieSession({
-        keys: [(process.env.SESSION_TOKEN || '')]
+        keys: [(process.env.SESSION_TOKEN || '')],
+        maxAge: 3600000,
     }));
     app.use(passport.session());
 
