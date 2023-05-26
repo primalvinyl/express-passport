@@ -8,7 +8,6 @@ export default (app: Application) => {
             res: Response,
             next: NextFunction
         ) => {
-            console.log(error);
             const status = error.status || 400;
             const message = error.message || '';
             res.status(status).json({

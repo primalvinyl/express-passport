@@ -3,6 +3,14 @@ import app from '../src/app';
 
 describe('homeRoutes', () => {
     const testClient = request(app);
+    const authClient = request.agent(app);
+
+    beforeAll(async () => {
+        // sign in
+        await authClient
+            .post('/auth/login')
+            .send({ username: 'test', password: 'test' });
+    });
 
     it('root endpoint should return data', async () => {
         await testClient
@@ -17,13 +25,6 @@ describe('homeRoutes', () => {
     });
 
     it('protected endpoint should return data if logged in', async () => {
-        const authClient = request.agent(app);
-
-        //sign in
-        await authClient
-            .post('/auth/login')
-            .send({ username: 'test', password: 'test' });
-
         await authClient
             .get('/protected')
             .expect(200, { message: 'access granted' });

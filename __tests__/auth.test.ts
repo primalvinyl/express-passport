@@ -1,9 +1,17 @@
 import request from 'supertest';
 import app from '../src/app';
 
-const testClient = request(app);
-
 describe('authRoutes', () => {
+    const testClient = request(app);
+    const authClient = request.agent(app);
+
+    beforeAll(async () => {
+        // sign in
+        await authClient
+            .post('/auth/login')
+            .send({ username: 'test', password: 'test' });
+    });
+
     it('sign in success should return success message', async () => {
         await testClient
             .post('/auth/login')
@@ -19,13 +27,6 @@ describe('authRoutes', () => {
     });
 
     it('sign out success should return success message', async () => {
-        const authClient = request.agent(app);
-
-        //sign in
-        await authClient
-            .post('/auth/login')
-            .send({ username: 'test', password: 'test' });
-
         await authClient
             .post('/auth/logout')
             .expect(200, { message: 'successfully signed out' });

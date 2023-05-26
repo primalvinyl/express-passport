@@ -9,16 +9,9 @@ authRoute.post(
         if (req.isAuthenticated()) next({ message: 'already signed in' });
         else next();
     },
-    (req, res, next) => {
-        passport.authenticate(
-            'local',
-            (error: Error, user: Record<string, any>) => {
-                req.logIn(user, (error) => {
-                    if (error) next({ message: 'authentication failed' });
-                    else res.json({ message: 'successfully signed in' });
-                });
-            }
-        )(req, res, next)
+    passport.authenticate('local'),
+    (req, res) => {
+        res.json({ message: 'successfully signed in' });
     },
 );
 

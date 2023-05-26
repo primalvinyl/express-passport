@@ -1,25 +1,30 @@
 import passport from 'passport';
+import MockStrategy from '../../__mocks__/mockStrategy';
 import { Strategy as LocalStrategy } from 'passport-local';
 
-function getVerifyFunction() {
-    let verifyFunction;
+function getStrategy() {
+    let strategy;
     switch (process.env.NODE_ENV) {
         case 'production':
-            verifyFunction = (username: string, password: string, done: Function) => {
-                if (username === 'fu' && password === 'bar') done(null, { username });
-                else done({ message: 'authentication failed' });
-            };
+            strategy = new LocalStrategy(
+                (username: string, password: string, done: Function) => {
+                    if (username === 'fu' && password === 'bar') done(null, { username });
+                    else done({ message: 'authentication failed' });
+                }
+            );
             break;
         default:
-            verifyFunction = (username: string, password: string, done: Function) => {
-                if (username === 'test' && password === 'test') done(null, { username });
-                else done({ message: 'authentication failed' });
-            };
+            strategy = new MockStrategy(
+                ({ username, password }: Record<string, any>, done: Function) => {
+                    if (username === 'test' && password === 'test') done(null, { username });
+                    else done({ message: 'authentication failed' });
+                }
+            );
     }
-    return verifyFunction;
+    return strategy;
 }
 
 export default () => {
-    const verifyFunction = getVerifyFunction();
-    passport.use(new LocalStrategy(verifyFunction));
+    const strategy = getStrategy();
+    passport.use('local', strategy);
 };
